@@ -1,16 +1,34 @@
-from stats import get_num_words, get_char_counts
-
-def get_book_text(filepath):
-    with open(filepath) as f:
-        return f.read()
+import sys
+from stats import word_count, char_count, sort_characters
+from bookbot import get_book_text
 
 def main():
-    text = get_book_text("books/frankenstein.txt")
+    # Check if a book path argument was passed
+    if len(sys.argv) != 2:
+        print("Usage: python3 main.py <path_to_book>")
+        sys.exit(1)
 
-    num_words = get_num_words(text)
+    book_path = sys.argv[1]
+
+    print("============ BOOKBOT ============")
+    print(f"Analyzing book found at {book_path}...")
+
+    text = get_book_text(book_path)
+
+    # ----- WORD COUNT -----
+    num_words = word_count(text)
+    print("----------- Word Count ----------")
     print(f"Found {num_words} total words")
 
-    char_counts = get_char_counts(text)
-    print(char_counts)
+    # ----- CHARACTER COUNT -----
+    characters = char_count(text)
+    sorted_characters = sort_characters(characters)
+
+    print("--------- Character Count -------")
+    for item in sorted_characters:
+        if item["char"].isalpha():  # only alphabetical
+            print(f"{item['char']}: {item['num']}")
+
+    print("============= END ===============")
 
 main()
